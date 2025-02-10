@@ -35,7 +35,6 @@ class MainActivity : ComponentActivity() {
                     Text(text = "Hello World!")
                     Text(text = "Welcome to your first application in Kotlin ")
                 }
-
                 }
                 /*
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->

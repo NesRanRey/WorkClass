@@ -46,7 +46,7 @@ import com.example.workclass.ui.screens.TestScreen
 
 
 class MainActivity : ComponentActivity() {
-    override fun onCreate(savedInstanceState: Bundle?) {
+    override fun onCreate( savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         //enableEdgeToEdge()
         setContent {
@@ -68,7 +68,8 @@ fun SetupNavGraph(navController: NavHostController){
     NavHost(navController=navController, startDestination= "main_menu" ){
         composable("main_menu"){MainMenuScreen(navController) } //Se importa la clase
         composable("home_screen"){HomeScreen(navController) } //Se importa la clase
-        composable("test_screen"){ TestScreen(navController) } //Se importa la clase
+        composable("test_screen"){ TestScreen(navController) } //Se importa la class
+
     }
 
 }

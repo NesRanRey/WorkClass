@@ -52,45 +52,23 @@ class MainActivity : ComponentActivity() {
         setContent {
             WorkClassTheme {
                 ComposableMultiScreenApp()
-               /* Column() {
-                    Column() {
-                      Column (){
-                         TextComposable("Nestor")
-                          TextComposable()
-                          TextComposable()
-                          TextComposable()
-                    }
-                        Row (){
-                            TextComposable()
-                            TextComposable()
-                            TextComposable()
-                            TextComposable()
-                        }
-                        Column (){
-                            ModifierExample1()
-                            ModifierExample3()
-                            CustomText()
-                            picture()
-                        }*/
+
                 }
             }
         }
     }
 
-
-
-
     @Composable
-fun ComposableMultiScreenApp(){
+fun ComposableMultiScreenApp(){ //Manda a llamar a una clase
         val navController = rememberNavController()
         SetupNavGraph(navController = navController)
 }
 @Composable
 fun SetupNavGraph(navController: NavHostController){
-    NavHost(navController=navController, startDestination= "home_screen"){
-        composable("main_menu"){MainMenuScreen(navController) }
-        composable("home_screen"){HomeScreen(navController) }
-        composable("test_screen"){ TestScreen(navController) }
+    NavHost(navController=navController, startDestination= "main_menu"){
+        composable("main_menu"){MainMenuScreen(navController) } //Se importa la clase
+        composable("home_screen"){HomeScreen(navController) } //Se importa la clase
+        composable("test_screen"){ TestScreen(navController) } //Se importa la clase
     }
 
 }

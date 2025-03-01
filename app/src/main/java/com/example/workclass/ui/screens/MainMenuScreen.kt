@@ -31,5 +31,10 @@ fun MainMenuScreen(navController: NavHostController){
         ) {
             Text("Go to Test Screen")
         }
+        Button(
+            onClick = {navController.navigate("bbva_interface")}
+        ) {
+            Text("Go to BBVA Interface")
+        }
     }
 }

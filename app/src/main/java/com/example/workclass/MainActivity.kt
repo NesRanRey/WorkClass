@@ -40,6 +40,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.compose.composable
 import com.example.tuapp.ui.screens.BbvaInterface
+import com.example.workclass.ui.screens.ComponentsScreen
 import com.example.workclass.ui.screens.HomeScreen
 import com.example.workclass.ui.theme.WorkClassTheme
 import com.example.workclass.ui.screens.MainMenuScreen
@@ -71,7 +72,7 @@ fun SetupNavGraph(navController: NavHostController){
         composable("home_screen"){HomeScreen(navController) } //Se importa la clase
         composable("test_screen"){ TestScreen(navController) } //Se importa la class
         composable("bbva_interface"){ BbvaInterface(navController) }
-
+        composable("components_screen"){ ComponentsScreen(navController) }
     }
 
 }

@@ -7,13 +7,18 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AccountBox
 import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.AddCircle
 import androidx.compose.material.icons.filled.Build
 import androidx.compose.material.icons.filled.Check
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.Face
+import androidx.compose.material.icons.filled.Home
+import androidx.compose.material.icons.filled.Lock
 import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.material.icons.filled.ShoppingCart
@@ -67,20 +72,24 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
+import com.example.workclass.data.model.MenuModel
 import kotlinx.coroutines.launch
 
 
 @Composable
 fun ComponentsScreen (navController: NavHostController){
-    //Buttons()
-    //FloatingButtons()
-    //Progress()
-    //Chips()
-    //Sliders()
-    //Switches()
-    //Badges()
-    //SnackBars()
-    //AlertDialogs()
+  val menuOptions = arrayOf(
+      MenuModel(1, "Buttons", "buttons", Icons.Filled.Home),
+      MenuModel(2, "FloatingButtons", "floating-buttons", Icons.Filled.Menu),
+      MenuModel(3,"Progress","progress", Icons.Filled.Star),
+      MenuModel(4,"Chips", "chips", Icons.Filled.ShoppingCart),
+      MenuModel(5, "Sliders", "sliders", Icons.Filled.Build),
+      MenuModel(6,"Switches", "switches", Icons.Filled.Person),
+      MenuModel(7,"Badges", "badges", Icons.Filled.Face),
+      MenuModel(8,"SnackBars", "snack-bars", Icons.Filled.AddCircle),
+      MenuModel(9,"AlertDialogs", "alert-dialogs", Icons.Filled.Lock)
+
+  )
 
     var option by rememberSaveable { mutableStateOf("buttons") }
     var drawerState = rememberDrawerState(initialValue = DrawerValue.Closed )
@@ -92,12 +101,15 @@ fun ComponentsScreen (navController: NavHostController){
             ModalDrawerSheet {
                 Text("Menu", modifier = Modifier.padding(16.dp))
                 HorizontalDivider()
-                NavigationDrawerItem(
-                    icon = { Icon(Icons.Filled.AccountBox, contentDescription = "")},
-                    label = { Text("Buttons")},
+                LazyColumn {
+                    items(menuOptions){item ->
+                        NavigationDrawerItem(
+
+                    icon = { Icon(item.icon, contentDescription = "")},
+                    label = { Text(item.title) },
                     selected = false,
                     onClick = {
-                        option = "buttons"
+                        option = item.option
                         scope.launch {
                             drawerState.apply {
                                 close()
@@ -105,7 +117,10 @@ fun ComponentsScreen (navController: NavHostController){
                         }
                     }
                 )
-                NavigationDrawerItem(
+            }
+
+        }
+                /*NavigationDrawerItem(
                     icon = { Icon(Icons.Filled.Check, contentDescription = "")},
                     label = { Text("Floating Buttons")},
                     selected = false,
@@ -208,7 +223,7 @@ fun ComponentsScreen (navController: NavHostController){
                             }
                         }
                     }
-                )
+                )*/
             }
         }
     ) {

@@ -710,7 +710,7 @@ fun Adaptive (){
     var height = currentWindowAdaptiveInfo().windowSizeClass.windowHeightSizeClass
     var width = currentWindowAdaptiveInfo().windowSizeClass.windowWidthSizeClass
     // Compact width < 600 dp Phone Portrait
-    // Medium Width >= 600 dp  < 840 dp Tablet Portrait
+    // Medium Width >= 600 dp < 840 dp Tablet Portrait
     // Expanded Width >= 840 dp Tablet Landscape
 
     // Compact Height < 480 dp Phone Landscape

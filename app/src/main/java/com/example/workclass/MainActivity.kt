@@ -50,7 +50,7 @@ import com.example.workclass.ui.screens.TestScreen
 class MainActivity : ComponentActivity() {
     override fun onCreate( savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        //enableEdgeToEdge()
+        enableEdgeToEdge()
         setContent {
             WorkClassTheme {
                 ComposableMultiScreenApp()

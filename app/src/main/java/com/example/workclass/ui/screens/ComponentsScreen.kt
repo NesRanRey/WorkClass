@@ -57,6 +57,7 @@ import androidx.compose.material3.InputChipDefaults
 import androidx.compose.material3.LargeFloatingActionButton
 import androidx.compose.material3.LargeTopAppBar
 import androidx.compose.material3.LinearProgressIndicator
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalDrawerSheet
 import androidx.compose.material3.ModalNavigationDrawer
 import androidx.compose.material3.NavigationDrawerItem
@@ -86,6 +87,8 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
+import androidx.window.core.layout.WindowHeightSizeClass
+import androidx.window.core.layout.WindowWidthSizeClass
 import com.example.workclass.R
 import com.example.workclass.data.model.MenuModel
 import com.example.workclass.data.model.PostCardModel
@@ -622,8 +625,8 @@ fun Bars(){
 
         LargeTopAppBar(
             colors = TopAppBarDefaults.topAppBarColors(
-                containerColor = Color.Black,
-                titleContentColor = Color.White
+                containerColor = MaterialTheme.colorScheme.primary,
+                titleContentColor = MaterialTheme.colorScheme.secondary
             ),
             title = { Text("Screen Title")},
             actions= {
@@ -663,8 +666,9 @@ fun Bars(){
             modifier = Modifier
                 .weight(1f)
                 .fillMaxSize()
-        )
-        {}
+        ) {
+            Adaptive()
+        }
         BottomAppBar (
             containerColor = Color.DarkGray,
             contentColor= Color.White
@@ -717,11 +721,44 @@ fun Adaptive (){
     // Medium Height >= 480 dp  < 900 dp Tablet Landscape Phone Portrait
     // Expanded Height >= 900 dp  Tablet Portrait
 
+    val arrayposts= arrayOf(
+        PostCardModel(1, "Title 1", "Text 1", R.drawable.p),
+        PostCardModel(2, "Title 2", "Text 2", R.drawable.p),
+        PostCardModel(3, "Title 3", "Text 3", R.drawable.p),
+        PostCardModel(4, "Title 4", "Text 4", R.drawable.p),
+        PostCardModel(5, "Title 5", "Text 5", R.drawable.p),
+        PostCardModel(6, "Title 6", "Text 6", R.drawable.p),
+        PostCardModel(7, "Title 7", "Text 7", R.drawable.p),
+        PostCardModel(8, "Title 8", "Text 8", R.drawable.p),
+        PostCardModel(9, "Title 9", "Text 9", R.drawable.p),
+    )
 
-    Column {
-        Text(windowSize.toString())
-        Text(height.toString())
-        Text(width.toString())
+    if (width == WindowWidthSizeClass.COMPACT){
 
+        LazyColumn(
+            modifier = Modifier
+                .fillMaxSize()
+
+        ){
+            items(arrayposts){ item ->
+                PostCardComponent(item.id, item.title, item.text, item.image)
+
+            }
+        }
+
+
+    }else if (height == WindowHeightSizeClass.COMPACT)
+    {
+        LazyColumn(
+            modifier = Modifier
+                .fillMaxSize()
+
+        ){
+            items(arrayposts){ item ->
+                PostCardCompactComponent(item.id, item.title, item.text, item.image)
+
+            }
+        }
     }
+
 }

@@ -29,7 +29,7 @@ import com.example.workclass.R
 fun PostCardComponent(id: Int, title: String, text:String, image:Int){
     Card(
         modifier = Modifier
-        .background(Color.LightGray)
+        .background(Color.Yellow)
         .fillMaxWidth()
         .padding(5.dp)){
 

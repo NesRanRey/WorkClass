@@ -40,6 +40,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.compose.composable
 import com.example.tuapp.ui.screens.BbvaInterface
+import com.example.workclass.ui.screens.AlertDialogs
 import com.example.workclass.ui.screens.ComponentsScreen
 import com.example.workclass.ui.screens.HomeScreen
 import com.example.workclass.ui.theme.WorkClassTheme
@@ -61,7 +62,7 @@ class MainActivity : ComponentActivity() {
     }
 
     @Composable
-fun ComposableMultiScreenApp(){ //Manda a llamar a una clase
+fun ComposableMultiScreenApp(){
         val navController = rememberNavController()
         SetupNavGraph(navController = navController)
 }

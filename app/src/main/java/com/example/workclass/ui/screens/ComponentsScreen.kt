@@ -1,12 +1,27 @@
 package com.example.workclass.ui.screens
 
+import android.widget.CalendarView
+import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.background
+import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.gestures.awaitEachGesture
+import androidx.compose.foundation.gestures.awaitFirstDown
+import androidx.compose.foundation.gestures.waitForUpOrCancellation
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.grid.GridCells
@@ -14,25 +29,39 @@ import androidx.compose.foundation.lazy.grid.LazyHorizontalGrid
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.shape.CornerSize
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.BasicTextField
+import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AccountBox
+import androidx.compose.material.icons.filled.AccountCircle
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.AddCircle
 import androidx.compose.material.icons.filled.Build
+import androidx.compose.material.icons.filled.Call
 import androidx.compose.material.icons.filled.Check
 import androidx.compose.material.icons.filled.Close
+import androidx.compose.material.icons.filled.DateRange
+import androidx.compose.material.icons.filled.Email
 import androidx.compose.material.icons.filled.Face
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Info
+import androidx.compose.material.icons.filled.LocationOn
 import androidx.compose.material.icons.filled.Lock
 import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material.icons.filled.Person
+import androidx.compose.material.icons.filled.PlayArrow
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material.icons.filled.ShoppingCart
 import androidx.compose.material.icons.filled.Star
 import androidx.compose.material.icons.filled.ThumbUp
 import androidx.compose.material.icons.filled.Warning
+import androidx.compose.material.pullrefresh.PullRefreshIndicator
+import androidx.compose.material.pullrefresh.pullRefresh
+import androidx.compose.material.pullrefresh.rememberPullRefreshState
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.AssistChip
 import androidx.compose.material3.AssistChipDefaults
@@ -40,8 +69,14 @@ import androidx.compose.material3.Badge
 import androidx.compose.material3.BadgedBox
 import androidx.compose.material3.BottomAppBar
 import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Checkbox
 import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.DatePicker
+import androidx.compose.material3.DatePickerDialog
+import androidx.compose.material3.DateRangePicker
 import androidx.compose.material3.DrawerValue
 import androidx.compose.material3.ElevatedButton
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -58,10 +93,19 @@ import androidx.compose.material3.LargeFloatingActionButton
 import androidx.compose.material3.LargeTopAppBar
 import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.ModalDrawerSheet
 import androidx.compose.material3.ModalNavigationDrawer
+import androidx.compose.material3.MultiChoiceSegmentedButtonRow
 import androidx.compose.material3.NavigationDrawerItem
 import androidx.compose.material3.OutlinedButton
+import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.RadioButton
+import androidx.compose.material3.RadioButtonDefaults
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SegmentedButton
+import androidx.compose.material3.SegmentedButtonDefaults
+import androidx.compose.material3.SingleChoiceSegmentedButtonRow
 import androidx.compose.material3.Slider
 import androidx.compose.material3.SmallFloatingActionButton
 import androidx.compose.material3.SnackbarHost
@@ -69,12 +113,19 @@ import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
+import androidx.compose.material3.TextField
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.adaptive.currentWindowAdaptiveInfo
+import androidx.compose.material3.rememberDatePickerState
+import androidx.compose.material3.rememberDateRangePickerState
 import androidx.compose.material3.rememberDrawerState
+import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
@@ -82,10 +133,22 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.input.pointer.PointerEventPass
+import androidx.compose.ui.input.pointer.pointerInput
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.text.input.PasswordVisualTransformation
+import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
+import androidx.compose.ui.viewinterop.AndroidView
+import androidx.compose.ui.window.Popup
 import androidx.navigation.NavHostController
 import androidx.window.core.layout.WindowHeightSizeClass
 import androidx.window.core.layout.WindowWidthSizeClass
@@ -95,23 +158,39 @@ import com.example.workclass.data.model.PostCardModel
 import com.example.workclass.ui.components.PostCardCompactComponent
 import com.example.workclass.ui.components.PostCardComponent
 import com.example.workclass.ui.components.PostCardComponent
+import com.google.accompanist.swiperefresh.SwipeRefresh
+import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import java.text.SimpleDateFormat
+import java.time.Instant
+import java.time.LocalDate
+import java.time.ZoneId
+import java.util.Date
+import java.util.Locale
 
 
 @Composable
 fun ComponentsScreen (navController: NavHostController){
   val menuOptions = arrayOf(
       MenuModel(1, "Buttons", "buttons", Icons.Filled.Home),
-      MenuModel(2, "FloatingButtons", "floating-buttons", Icons.Filled.Menu),
+      MenuModel(2, "Floating Buttons", "floating-buttons", Icons.Filled.Menu),
       MenuModel(3,"Progress","progress", Icons.Filled.Star),
       MenuModel(4,"Chips", "chips", Icons.Filled.ShoppingCart),
       MenuModel(5, "Sliders", "sliders", Icons.Filled.Build),
       MenuModel(6,"Switches", "switches", Icons.Filled.Person),
       MenuModel(7,"Badges", "badges", Icons.Filled.Face),
-      MenuModel(8,"SnackBars", "snack-bars", Icons.Filled.AddCircle),
-      MenuModel(9,"AlertDialogs", "alert-dialogs", Icons.Filled.Lock),
-      MenuModel(10,"Bars", "bars",Icons.Filled.Settings )
-
+      MenuModel(8,"Snack Bars", "snack-bars", Icons.Filled.AddCircle),
+      MenuModel(9,"Alert Dialogs", "alert-dialogs", Icons.Filled.Lock),
+      MenuModel(10,"Bars", "bars",Icons.Filled.Settings ),
+      MenuModel(11, "Input Fields", "input-fields", Icons.Filled.Call),
+      MenuModel(12, "DatePicker", "date-picker", Icons.Filled.DateRange),
+      MenuModel(13, "Date Picker Dialog", "date-picker-dialog", Icons.Filled.ThumbUp),
+      MenuModel(14, "Date Range Picker", "date-range-picker", Icons.Filled.PlayArrow),
+      MenuModel(15, "Pull to Refresh", "pull-to-refresh", Icons.Filled.Search),
+      MenuModel(16, "Bottom Sheets", "bottom-sheets", Icons.Filled.Info),
+      MenuModel(17, "Single Choice Segmented Button", "Single-Choice-Segmented-Button", Icons.Filled.Warning),
+      MenuModel(18, "Multi Choice Segmented Button", "Multi-Choice-Segmented-Button", Icons.Filled.Close)
   )
 
     var option by rememberSaveable { mutableStateOf("buttons") }
@@ -251,7 +330,7 @@ fun ComponentsScreen (navController: NavHostController){
         }
     ) {
         Column {
-            when (option){
+            when (option) {
                 "buttons" -> {
                     Buttons()
                 }
@@ -259,37 +338,71 @@ fun ComponentsScreen (navController: NavHostController){
                 "floating-buttons" -> {
                     FloatingButtons()
                 }
+
                 "progress" -> {
                     Progress()
                 }
+
                 "chips" -> {
                     Chips()
                 }
-                 "sliders" -> {
-                     Sliders()
-                 }
-                "switches" -> {
-                   Switches()
+
+                "sliders" -> {
+                    Sliders()
                 }
+
+                "switches" -> {
+                    Switches()
+                }
+
                 "badges" -> {
                     Badges()
                 }
+
                 "snack-bars" -> {
                     SnackBars()
                 }
-                "alertdialogs" -> {
+
+                "alert-dialogs" -> {
                     AlertDialogs()
                 }
+
                 "bars" -> {
                     Bars()
                 }
+
+                "input-fields" -> {
+                    InputFields()
+                }
+                "date-picker" -> {
+                    DatePicker()
+                }
+                "date-picker-dialog" -> {
+                    DatePickerDialog()
+                }
+                "date-range-picker" -> {
+                    DateRangePicker()
+                }
+
+                "pull-to-refresh" -> {
+                    PullToRefresh()
+                }
+                "bottom-sheets" -> {
+                    BottomSheets()
+                }
+                "Single-Choice-Segmented-Button" -> {
+                    SingleChoiceSegmentedButton()
+                }
+                "Multi-Choice-Segmented-Button" -> {
+                    MultiChoiceSegmentedButton()
             }
 
         }
 
     }
+    }
+    }
 
-}
 
 //@Preview(showBackground = true)
 @Composable
@@ -545,47 +658,78 @@ fun Badges (){
 }
 
 @Composable
-fun SnackBars(){
-    Column (
-        modifier = Modifier
-            .fillMaxWidth(),
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.SpaceEvenly
-    ){
-        val snackState= remember {SnackbarHostState()}
-        val snackScope = rememberCoroutineScope ()
-        
-        SnackbarHost(hostState = snackState)
-        
-        fun launchSnackBar(){
-            snackScope.launch { snackState.showSnackbar("The massage has been sent") }
-        }
-
-        Button(::launchSnackBar){
-            Text("Send message")
-        }
-    }
-}
-
-
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-fun AlertDialogs(){
-    Column (
+fun SnackBars() {
+    Column(
         modifier = Modifier
             .fillMaxSize(),
         horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.SpaceEvenly
-    ){
-       var showAlertDialog by remember { mutableStateOf(false)}
+        verticalArrangement = Arrangement.Center
+
+    ) {
+
+        val snackState = remember { SnackbarHostState() }
+        val snackScope = rememberCoroutineScope()
+
+        SnackbarHost(hostState = snackState)
+
+        fun launchSnackBar(){
+            snackScope.launch { snackState.showSnackbar("The message was sent") }
+        }
+        Button(::launchSnackBar){
+            Text("Send Message")
+            }
+        }
+    }
+
+@Composable
+fun AlertDialogs() {
+    Column(
+        modifier = Modifier
+            .fillMaxSize(),
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.Center
+    ) {
+        var showAlertDialog by remember { mutableStateOf(false) }
         var selectedOption by remember { mutableStateOf("") }
 
-        if (showAlertDialog){
+        Button(onClick = { showAlertDialog = true }) {
+            Text("Delete File")
+        }
+
+        if (showAlertDialog) {
             AlertDialog(
-                icon = { Icon(Icons.Filled.Warning, contentDescription = "Warning Icon")},
-                title = { Text("Confirm Delection")},
-                text = { Text("Are you sure you want to delete the file") },
-                onDismissRequest = {},
+                onDismissRequest = {
+                    showAlertDialog = false
+                },
+                title = {
+                    Column(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalAlignment = Alignment.CenterHorizontally
+                    ) {
+                        Icon(
+                            imageVector = Icons.Filled.Warning,
+                            contentDescription = "Warning Icon",
+                            tint = Color.Red,
+                            modifier = Modifier
+                                .size(32.dp)
+                                .align(Alignment.CenterHorizontally)
+                        )
+                        Spacer(modifier = Modifier.height(8.dp))
+                        Text(
+                            text = "Confirm Deletion",
+                            textAlign = TextAlign.Center,
+                            style = MaterialTheme.typography.headlineSmall,
+                            modifier = Modifier.align(Alignment.CenterHorizontally)
+                        )
+                    }
+                },
+                text = {
+                    Text(
+                        "Do you really want to delete this file?",
+                        textAlign = TextAlign.Center,
+                        modifier = Modifier.fillMaxWidth()
+                    )
+                },
                 confirmButton = {
                     TextButton(
                         onClick = {
@@ -596,7 +740,7 @@ fun AlertDialogs(){
                         Text("Yes")
                     }
                 },
-                    dismissButton = {
+                dismissButton = {
                     TextButton(
                         onClick = {
                             selectedOption = "Canceled"
@@ -609,9 +753,6 @@ fun AlertDialogs(){
             )
         }
 
-        Button(onClick = {showAlertDialog= true}){
-            Text("Delete file")
-        }
         Text(selectedOption)
     }
 }
@@ -708,11 +849,14 @@ fun Bars(){
         }
     }
 
+
+
 @Composable
 fun Adaptive (){
     var windowSize = currentWindowAdaptiveInfo().windowSizeClass
     var height = currentWindowAdaptiveInfo().windowSizeClass.windowHeightSizeClass
     var width = currentWindowAdaptiveInfo().windowSizeClass.windowWidthSizeClass
+
     // Compact width < 600 dp Phone Portrait
     // Medium Width >= 600 dp < 840 dp Tablet Portrait
     // Expanded Width >= 840 dp Tablet Landscape
@@ -760,5 +904,413 @@ fun Adaptive (){
             }
         }
     }
+}
 
+@Composable
+fun InputFields() {
+    var fullName by remember { mutableStateOf("") }
+    var username by remember { mutableStateOf("") }
+    var email by remember { mutableStateOf("") }
+    var password by remember { mutableStateOf("") }
+    var isPasswordVisible by remember { mutableStateOf(false) }
+
+    val isFormValid = fullName.isNotEmpty() &&
+            username.isNotEmpty() &&
+            android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches() &&
+            password.length >= 8
+
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(20.dp),
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.spacedBy(20.dp)
+    ) {
+        Spacer(modifier = Modifier.height(40.dp))
+
+        TextField(
+            value = fullName,
+            onValueChange = { fullName = it },
+            label = { Text("Full Name") },
+            leadingIcon = { Icon(Icons.Default.Person, contentDescription = "Full Name") },
+            modifier = Modifier.fillMaxWidth()
+        )
+
+        OutlinedTextField(
+            value = username,
+            onValueChange = { username = it },
+            label = { Text("Username") },
+            leadingIcon = { Icon(Icons.Default.AccountCircle, contentDescription = "Username") },
+            modifier = Modifier.fillMaxWidth()
+        )
+
+        OutlinedTextField(
+            value = email,
+            onValueChange = { email = it },
+            label = { Text("Email") },
+            leadingIcon = { Icon(Icons.Default.Email, contentDescription = "Email") },
+            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email),
+            isError = email.isNotEmpty() && !android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches(),
+            supportingText = {
+                if (email.isNotEmpty() && !android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
+                    Text("Enter a valid email address")
+                }
+            },
+            modifier = Modifier.fillMaxWidth()
+        )
+        TextField(
+            value = password,
+            onValueChange = { password = it },
+            label = { Text("Password") },
+            leadingIcon = { Icon(Icons.Default.Lock, contentDescription = "Password") },
+            trailingIcon = {
+                IconButton(onClick = { isPasswordVisible = !isPasswordVisible }) {
+
+                }
+            },
+            visualTransformation = if (isPasswordVisible) VisualTransformation.None else PasswordVisualTransformation(),
+            isError = password.isNotEmpty() && password.length < 8,
+            supportingText = {
+                if (password.isNotEmpty() && password.length < 8) {
+                    Text("The Password must have at least 8 characters ")
+                }
+            },
+            modifier = Modifier.fillMaxWidth()
+        )
+
+        Button(
+            onClick = {
+                println("User Data - Name: $fullName, Username: $username, Email: $email, Password: $password")
+            },
+            enabled = isFormValid,
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(50.dp)
+        ) {
+            Text("Send", fontSize = 18.sp)
+        }
+
+        TextButton(
+            onClick = { println("Forgot Password clicked") },
+            modifier = Modifier.padding(top = 14.dp)
+        ) {
+            Text("Forgot Password", color = Color.Blue, fontSize = 16.sp)
+        }
+    }
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun DatePicker(){
+    val datePickerState = rememberDatePickerState()
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(16.dp),
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.SpaceEvenly
+    ){
+        DatePicker(state = datePickerState)
+        Spacer(modifier = Modifier.height(16.dp))
+
+        Button(onClick = {
+            val selectedDate = datePickerState.selectedDateMillis?.let {
+                Instant.ofEpochMilli(it).atZone(ZoneId.systemDefault()).toLocalDate()
+            }
+        }) {
+            Text("Confirm Date ")
+        }
+    }
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun DatePickerDialog() {
+    var showDialog by remember { mutableStateOf(false) }
+    val datePickerState = rememberDatePickerState()
+    var selectedDate by remember { mutableStateOf<String?>(null) }
+
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(16.dp),
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.SpaceEvenly
+    ) {
+        Button(onClick = { showDialog = true }) {
+            Text("Select Date")
+        }
+
+        if (selectedDate != null) {
+            Text("You selected: $selectedDate")
+        }
+
+        // DatePickerDialog
+        if (showDialog) {
+            DatePickerDialog(
+                onDismissRequest = { showDialog = false },
+                confirmButton = {
+                    TextButton(
+                        onClick = {
+
+                            datePickerState.selectedDateMillis?.let { millis ->
+                                selectedDate = Instant.ofEpochMilli(millis)
+                                    .atZone(ZoneId.systemDefault())
+                                    .toLocalDate()
+                                    .toString()
+                            }
+                            showDialog = false
+                        }
+                    ) {
+                        Text("Select")
+                    }
+                }
+            ) {
+                DatePicker(state = datePickerState)
+            }
+        }
+    }
+}
+
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun DateRangePicker(){
+    val rangePickerState = rememberDateRangePickerState()
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(16.dp),
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.SpaceEvenly
+    ){
+        DateRangePicker(state = rangePickerState)
+        Button(onClick = {
+            val startDate = rangePickerState.selectedStartDateMillis?.let {
+                Instant.ofEpochMilli(it).atZone(ZoneId.systemDefault()).toLocalDate()
+            }
+            val endDate = rangePickerState.selectedEndDateMillis?.let {
+                Instant.ofEpochMilli(it).atZone(ZoneId.systemDefault()).toLocalDate()
+            }
+        }){
+            Text("Confirm Range")
+        }
+    }
+}
+
+@OptIn(ExperimentalMaterialApi::class)
+@Composable
+fun PullToRefresh() {
+    var isRefreshing by remember { mutableStateOf(false) }
+    var itemList by remember { mutableStateOf(List(10) { it + 1 }) }
+    val coroutineScope = rememberCoroutineScope()
+
+    val pullRefreshState = rememberPullRefreshState(
+        refreshing = isRefreshing,
+        onRefresh = {
+            coroutineScope.launch {
+                isRefreshing = true
+                delay(2000)
+                itemList = (1..10).shuffled()
+                isRefreshing = false
+            }
+        }
+    )
+
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+            .pullRefresh(pullRefreshState)
+    ) {
+        LazyColumn(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(top = 24.dp)
+        ) {
+            items(itemList) { item ->
+                Card(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(8.dp),
+                    elevation = CardDefaults.cardElevation(4.dp)
+                ) {
+                    Text(
+                        text = "Item $item",
+                        modifier = Modifier.padding(16.dp)
+                    )
+                }
+            }
+        }
+        PullRefreshIndicator(
+            refreshing = isRefreshing,
+            state = pullRefreshState,
+            modifier = Modifier.align(Alignment.TopCenter)
+        )
+    }
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun BottomSheets() {
+    val sheetState = rememberModalBottomSheetState()
+    var showBottomSheet by remember { mutableStateOf(false) }
+
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(16.dp),
+        contentAlignment = Alignment.Center
+    ) {
+        Button(onClick = { showBottomSheet = true }) {
+            Text("Open Bottom Sheet")
+        }
+    }
+
+    if (showBottomSheet) {
+        ModalBottomSheet(
+            onDismissRequest = { showBottomSheet = false },
+            sheetState = sheetState
+        ) {
+            Column(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(16.dp),
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.SpaceEvenly
+            ) {
+                Text("This is a Bottom Sheet")
+                Spacer(modifier = Modifier.height(16.dp))
+                Button(onClick = { showBottomSheet = false }) {
+                    Text("Close")
+                }
+            }
+        }
+    }
+}
+
+@Composable
+fun SingleChoiceSegmentedButton() {
+    val options = listOf("Day", "Month", "Year")
+    var selectedOption by remember { mutableStateOf(0) }
+
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(16.dp),
+        contentAlignment = Alignment.Center
+    ) {
+        Row(
+            modifier = Modifier
+                .wrapContentWidth(),
+            horizontalArrangement = Arrangement.Center
+        ) {
+            options.forEachIndexed { index, label ->
+                Box(
+                    modifier = Modifier
+                        .wrapContentWidth()
+                        .padding(horizontal = 4.dp)
+                        .background(
+                            color = if (index == selectedOption) MaterialTheme.colorScheme.primary
+                            else MaterialTheme.colorScheme.surfaceVariant,
+                            shape = when (index) {
+                                0 -> MaterialTheme.shapes.small.copy(
+                                    topEnd = CornerSize(0),
+                                    bottomEnd = CornerSize(0)
+                                )
+                                options.lastIndex -> MaterialTheme.shapes.small.copy(
+                                    topStart = CornerSize(0),
+                                    bottomStart = CornerSize(0)
+                                )
+                                else -> MaterialTheme.shapes.small.copy(
+                                    topStart = CornerSize(0),
+                                    topEnd = CornerSize(0),
+                                    bottomStart = CornerSize(0),
+                                    bottomEnd = CornerSize(0)
+                                )
+                            }
+                        )
+                        .clickable { selectedOption = index }
+                        .padding(vertical = 16.dp, horizontal = 24.dp),
+                    contentAlignment = Alignment.Center
+                ) {
+                    Row(
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.Center
+                    ) {
+                        RadioButton(
+                            selected = (index == selectedOption),
+                            onClick = { selectedOption = index },
+                            colors = RadioButtonDefaults.colors(
+                                selectedColor = if (index == selectedOption) MaterialTheme.colorScheme.onPrimary
+                                else MaterialTheme.colorScheme.onSurfaceVariant,
+                                unselectedColor = Color.Transparent
+                            ),
+                            modifier = Modifier.size(20.dp)
+                        )
+                        Spacer(modifier = Modifier.width(12.dp))
+                        Text(
+                            text = label,
+                            color = if (index == selectedOption) MaterialTheme.colorScheme.onPrimary
+                            else MaterialTheme.colorScheme.onSurfaceVariant,
+                            fontSize = 16.sp
+                        )
+                    }
+                }
+            }
+        }
+    }
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun MultiChoiceSegmentedButton() {
+    val selectedOptions = remember {
+        mutableStateListOf(false, false, false)
+    }
+    val options = listOf("Walk", "Ride", "Drive")
+
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(16.dp),
+        contentAlignment = Alignment.Center
+    ) {
+        MultiChoiceSegmentedButtonRow {
+            options.forEachIndexed { index, label ->
+                SegmentedButton(
+                    shape = SegmentedButtonDefaults.itemShape(
+                        index = index,
+                        count = options.size
+                    ),
+                    checked = selectedOptions[index],
+                    onCheckedChange = {
+                        selectedOptions[index] = !selectedOptions[index]
+                    },
+                    colors = SegmentedButtonDefaults.colors(
+                        activeContainerColor = MaterialTheme.colorScheme.primaryContainer,
+                        inactiveContainerColor = MaterialTheme.colorScheme.surfaceVariant,
+                        activeContentColor = MaterialTheme.colorScheme.onPrimaryContainer,
+                        inactiveContentColor = MaterialTheme.colorScheme.onSurfaceVariant
+                    ),
+                    icon = { SegmentedButtonDefaults.Icon(selectedOptions[index]) },
+                    label = {
+                        when (label) {
+                            "Walk" -> Icon(
+                                imageVector = Icons.Filled.Star,
+                                contentDescription = "Directions Walk"
+                            )
+                            "Ride" -> Icon(
+                                imageVector = Icons.Filled.Person,
+                                contentDescription = "Directions Bus"
+                            )
+                            "Drive" -> Icon(
+                                imageVector = Icons.Filled.LocationOn,
+                                contentDescription = "Directions Car"
+                            )
+                        }
+                    }
+                )
+            }
+        }
+    }
 }

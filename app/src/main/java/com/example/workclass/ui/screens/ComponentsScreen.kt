@@ -1191,7 +1191,7 @@ fun BottomSheets() {
 @Composable
 fun SingleChoiceSegmentedButton() {
     val options = listOf("Day", "Month", "Year")
-    var selectedOption by remember { mutableStateOf(0) }
+    var selectedOption by remember { mutableStateOf(0)  }
 
     Box(
         modifier = Modifier

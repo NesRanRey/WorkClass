@@ -43,6 +43,7 @@ import com.example.tuapp.ui.screens.BbvaInterface
 import com.example.workclass.ui.screens.AlertDialogs
 import com.example.workclass.ui.screens.ComponentsScreen
 import com.example.workclass.ui.screens.HomeScreen
+import com.example.workclass.ui.screens.LoginScreen
 import com.example.workclass.ui.theme.WorkClassTheme
 import com.example.workclass.ui.screens.MainMenuScreen
 import com.example.workclass.ui.screens.TestScreen
@@ -74,6 +75,7 @@ fun SetupNavGraph(navController: NavHostController){
         composable("test_screen"){ TestScreen(navController) } //Se importa la class
         composable("bbva_interface"){ BbvaInterface(navController) }
         composable("components_screen"){ ComponentsScreen(navController) }
+        composable("login_screen"){ LoginScreen(navController) }
     }
 
 }

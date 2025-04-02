@@ -65,5 +65,13 @@ dependencies {
     //Coll AsyncImage
     //implementation("io.coil-kt:coil-compose:2.4.0")
     implementation(libs.coil.compose)
+    // retrofit
+    implementation(libs.retrofit2.kotlinx.serialization.converter)
+    implementation(libs.retrofit)
+    implementation(libs.okhttp)
+    implementation(libs.kotlinx.serialization.json)
+    implementation(libs.converter.gson)
+    //
+    implementation (libs.androidx.lifecycle.runtime.ktx.v262)
 
 }

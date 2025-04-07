@@ -67,7 +67,7 @@ fun ManageAccountScreen(
             value = account.value.description,
             maxLines = 1,
             label = { "Account Description" },
-            onValueChange = {
+            onValueChange =  {
                 account.value = account.value.copy(description = it)
             }
 

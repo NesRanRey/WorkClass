@@ -8,16 +8,19 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
+import androidx.navigation.NavController
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun TopBarComponent(title:String){
+fun TopBarComponent(title:String, navController: NavController, location: String ){
     TopAppBar(
         title = { Text(title) },
         actions = {
-            IconButton(onClick = {}) {
+            if(location=="accounts_screen"){
+            IconButton(onClick = { navController.navigate("manage_account_screen") }) {
                 Icon(imageVector = Icons.Filled.Person, contentDescription = "Icon")
             }
+        }
         }
     )
 }

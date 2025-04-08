@@ -18,14 +18,21 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
+import com.example.workclass.data.model.database.AppDatabase
+import com.example.workclass.data.model.database.DatabaseProvider
 import com.example.workclass.data.model.viewmodel.AccountModel
 import com.example.workclass.data.model.viewmodel.AccountViewModel
 import com.example.workclass.data.model.viewmodel.UserViewModel
+import com.example.workclass.data.model.viewmodel.toAccountEntity
 import com.example.workclass.ui.components.AccountCardComponent
 import com.example.workclass.ui.components.AccountDetailCardComponent
 import com.example.workclass.ui.components.TopBarComponent
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -39,6 +46,11 @@ fun AccountsScreen(
         skipPartiallyExpanded = false
     )
     var accountDetail by remember { mutableStateOf<AccountModel?>(null) }
+
+    val db: AppDatabase= DatabaseProvider.getDatabase(LocalContext.current)
+    val accountDao= db.accountDao()
+
+
     Column {
       TopBarComponent("Accounts", navController, "accounts_screen")
 
@@ -91,10 +103,20 @@ fun AccountsScreen(
                 accountDetail?.id ?: 0,
                 accountDetail?.name ?: "",
                 accountDetail?.username ?: "",
-                accountDetail?.password?: "",
-                accountDetail?.imageURL?:"",
-                accountDetail?.description?: "",
+                accountDetail?.password ?: "",
+                accountDetail?.imageURL ?: "",
+                accountDetail?.description ?: "",
 
+                onSaveClick = {
+                    CoroutineScope(Dispatchers.IO).launch {
+                        try{
+                            accountDetail?.let { accountDao.insert(it.toAccountEntity()) }
+                            Log.d("debug-db", "Account inserted successfully")
+                        }catch (exception:Exception){
+                            Log.d("debug-db", "ERROR: $exception")
+                        }
+                    }
+                }
             )
         }
     }

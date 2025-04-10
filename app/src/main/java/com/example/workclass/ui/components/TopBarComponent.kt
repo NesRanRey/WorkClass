@@ -2,6 +2,7 @@ package com.example.workclass.ui.components
 
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Person
+import androidx.compose.material.icons.filled.Star
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -12,15 +13,18 @@ import androidx.navigation.NavController
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun TopBarComponent(title:String, navController: NavController, location: String ){
+fun TopBarComponent(title: String, navController: NavController, location: String) {
     TopAppBar(
         title = { Text(title) },
         actions = {
-            if(location=="accounts_screen"){
-            IconButton(onClick = { navController.navigate("manage_account_screen") }) {
-                Icon(imageVector = Icons.Filled.Person, contentDescription = "Icon")
+            if (location == "accounts_screen") {
+                IconButton(onClick = { navController.navigate("favorite_accounts_screen") }) {
+                    Icon(imageVector = Icons.Filled.Star, contentDescription = "Icon")
+                }
+                IconButton(onClick = { navController.navigate("manage_account_screen") }) {
+                    Icon(imageVector = Icons.Filled.Person, contentDescription = "Icon")
+                }
             }
-        }
         }
     )
 }

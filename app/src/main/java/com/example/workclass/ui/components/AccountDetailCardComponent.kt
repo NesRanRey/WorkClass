@@ -33,70 +33,52 @@ fun AccountDetailCardComponent(
     description: String,
     onSaveClick: () -> Unit
 ) {
-    Column() {
-        Row(
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(16.dp),
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.Start
+    ) {
+        AsyncImage(
+            model = imageURL,
+            error = painterResource(R.drawable.p),
+            contentDescription = "Logo de $name",
+            contentScale = ContentScale.FillBounds,
             modifier = Modifier
-                .fillMaxWidth()
-                .height(190.dp)
-                .padding(10.dp),
-            Arrangement.Absolute.SpaceBetween,
-            verticalAlignment = Alignment.CenterVertically
+                .width(100.dp)
+                .height(100.dp)
+        )
+
+        Column(
+            modifier = Modifier
+                .weight(1f)
+                .padding(start = 16.dp),
+            verticalArrangement = Arrangement.spacedBy(4.dp)
         ) {
-            IconButton(
-                modifier = Modifier
-                    .padding(16.dp, 0.dp, 0.dp, 0.dp),
-                onClick = {
-                    onSaveClick()
-                }
-
-            ) {
-                Icon(
-                    imageVector = Icons.Filled.Star,
-                    contentDescription = "Save as Favorite"
-                )
-            }
-            AsyncImage(
-                modifier = Modifier
-                    .width(100.dp)
-                    .height(100.dp),
-                model = imageURL,
-                error = painterResource(R.drawable.p),
-                contentDescription = "Deadpool Logo",
-                contentScale = ContentScale.FillBounds
-            )
-
-            Column(
-                modifier = Modifier
-                    .weight(1f)
-                    .padding(start = 10.dp),
-                verticalArrangement = Arrangement.Center,
-                horizontalAlignment = Alignment.Start
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically
             ) {
                 Text(
-                    modifier = Modifier.padding(10.dp),
                     text = name,
-                    fontSize = 10.sp,
-                    fontWeight = FontWeight.ExtraBold
+                    fontSize = 18.sp,
+                    fontWeight = FontWeight.Bold
                 )
-                Text(
-                    modifier = Modifier.padding(1.dp),
-                    text = username,
-                    fontSize = 10.sp,
-                    fontWeight = FontWeight.Light
-                )
-                Text(
-                    modifier = Modifier.padding(1.dp),
-                    text = password,
-                    fontSize = 10.sp,
-                    fontWeight = FontWeight.Light
-                )
-                Text(
-                    modifier = Modifier.padding(1.dp),
-                    text = description,
-                    fontSize = 10.sp,
-                    fontWeight = FontWeight.Light
-                )
+                IconButton(onClick = onSaveClick) {
+                    Icon(
+                        imageVector = Icons.Filled.Star,
+                        contentDescription = "Save to favorite"
+                    )
+                }
             }
+
+            Text(text = "Username: $username")
+            Text(text = "Password: ••••••••")
+            if (description.isNotBlank()) {
+                Text(text = "Description: $description")
             }
         }
+    }
 }

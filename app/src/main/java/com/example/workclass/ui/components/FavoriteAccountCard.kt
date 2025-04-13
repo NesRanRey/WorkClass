@@ -8,7 +8,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Delete
-import androidx.compose.material.icons.filled.Person
 import androidx.compose.material3.Card
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -27,20 +26,20 @@ import com.example.workclass.R
 
 @Composable
 fun FavoriteAccountCard(
-    id:Int,
-    name:String,
-    username:String,
-    password:String,
-    description:String,
-    imageURL:String,
+    id: Int,
+    name: String,
+    username: String,
+    password: String,
+    description: String,
+    imageURL: String,
     onDeleteClick: () -> Unit
 ){
     Card(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(10.dp),
+            .padding(10.dp)
     ){
-        Row (
+        Row(
             modifier = Modifier
                 .fillMaxWidth()
                 .height(100.dp)
@@ -58,92 +57,93 @@ fun FavoriteAccountCard(
                 contentScale = ContentScale.FillBounds
             )
             Text(
-                modifier = Modifier.padding(10.dp),
                 text = "Account Service",
                 color = Color.White,
-                fontSize = 10.sp,
-                fontWeight = FontWeight.ExtraBold
+                fontSize = 28.sp,
+                fontWeight = FontWeight.Bold
             )
-            IconButton(onClick = {
-                onDeleteClick()
-            }) {
-                Icon(imageVector = Icons.Filled.Delete, contentDescription = "Delete Account")
-            }
         }
-        Row (
+
+        IconButton(onClick = {
+            onDeleteClick()
+        }) {
+            Icon(imageVector = Icons.Filled.Delete, contentDescription = "Delete Account")
+        }
+
+        Row(
             modifier = Modifier
                 .fillMaxWidth()
-
                 .padding(5.dp),
             Arrangement.SpaceBetween,
             verticalAlignment = Alignment.CenterVertically
-        ) {
+        ){
             Text(
-                text = "Name: ",
+                text = "Name",
                 fontSize = 20.sp,
-                fontWeight = FontWeight.Medium,
+                fontWeight = FontWeight.Medium
             )
             Text(
                 text = name,
                 fontSize = 20.sp,
-                fontWeight = FontWeight.Medium,
+                fontWeight = FontWeight.Medium
             )
         }
-        Row (
+
+        Row(
             modifier = Modifier
                 .fillMaxWidth()
-
                 .padding(5.dp),
             Arrangement.SpaceBetween,
             verticalAlignment = Alignment.CenterVertically
-        ) {
+        ){
             Text(
-                text = "Username:",
+                text = "Username",
                 fontSize = 20.sp,
-                fontWeight = FontWeight.Medium,
+                fontWeight = FontWeight.Medium
             )
             Text(
                 text = username,
                 fontSize = 20.sp,
-                fontWeight = FontWeight.Medium,
+                fontWeight = FontWeight.Medium
             )
         }
-        Row (
+
+        Row(
             modifier = Modifier
                 .fillMaxWidth()
-
                 .padding(5.dp),
             Arrangement.SpaceBetween,
             verticalAlignment = Alignment.CenterVertically
-        ) {
+        ){
             Text(
                 text = "Password",
                 fontSize = 20.sp,
-                fontWeight = FontWeight.Medium,
+                fontWeight = FontWeight.Medium
             )
             Text(
                 text = password,
                 fontSize = 20.sp,
-                fontWeight = FontWeight.Medium,
+                fontWeight = FontWeight.Medium
             )
         }
-        Row (
+
+        Row(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(5.dp),
             Arrangement.SpaceBetween,
             verticalAlignment = Alignment.CenterVertically
-        ) {
+        ){
             Text(
                 text = "Description",
                 fontSize = 20.sp,
-                fontWeight = FontWeight.Medium,
+                fontWeight = FontWeight.Medium
             )
             Text(
                 text = description,
                 fontSize = 20.sp,
-                fontWeight = FontWeight.Medium,
+                fontWeight = FontWeight.Medium
             )
-            }
         }
+    }
 }

@@ -1,6 +1,7 @@
 package com.example.workclass.ui.components
 
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.material.icons.filled.Star
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -22,7 +23,7 @@ fun TopBarComponent(title: String, navController: NavController, location: Strin
                     Icon(imageVector = Icons.Filled.Star, contentDescription = "Icon")
                 }
                 IconButton(onClick = { navController.navigate("manage_account_screen") }) {
-                    Icon(imageVector = Icons.Filled.Person, contentDescription = "Icon")
+                    Icon(imageVector = Icons.Filled.Add, contentDescription = "Icon")
                 }
             }
         }

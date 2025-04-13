@@ -3,7 +3,6 @@ package com.example.workclass.data.model.viewmodel
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.workclass.data.model.UserModel
 import com.example.workclass.data.model.network.RetrofitClient
 import com.google.gson.JsonObject
 import kotlinx.coroutines.launch

@@ -1,4 +1,4 @@
-package com.example.workclass.data.model
+package com.example.workclass.data.model.viewmodel
 
 data class UserModel(
     var id: Int =0,

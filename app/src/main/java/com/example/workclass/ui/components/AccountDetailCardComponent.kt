@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Create
 import androidx.compose.material.icons.filled.Star
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -20,6 +21,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
 import coil.compose.AsyncImage
 import com.example.workclass.R
 
@@ -31,53 +33,129 @@ fun AccountDetailCardComponent(
     password: String,
     imageURL: String,
     description: String,
-    onSaveClick: () -> Unit
-) {
-    Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(16.dp),
-        verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.Start
-    ) {
-        AsyncImage(
-            model = imageURL,
-            error = painterResource(R.drawable.p),
-            contentDescription = "Logo de $name",
-            contentScale = ContentScale.FillBounds,
+    onSaveClick: () -> Unit,
+    navController: NavController
+){
+    Column(){
+        Row(
             modifier = Modifier
-                .width(100.dp)
-                .height(100.dp)
-        )
+                .fillMaxWidth()
+                .height(120.dp)
+                .padding(10.dp),
+            Arrangement.Absolute.SpaceAround,
+            verticalAlignment = Alignment.CenterVertically
+        ){
+            AsyncImage(
+                modifier = Modifier
+                    .width(100.dp)
+                    .height(100.dp),
+                model = imageURL,
+                error = painterResource(R.drawable.p),
+                contentDescription = "Account logo",
+                contentScale = ContentScale.FillBounds
+            )
+            IconButton(
+                modifier = Modifier.padding(20.dp,0.dp,0.dp,0.dp),
+                onClick = {
+                    onSaveClick()
+                }
+            ) {
+                Icon(
+                    imageVector = Icons.Filled.Star,
+                    contentDescription = "Save as favorite"
+                )
+            }
+            IconButton(
+                modifier = Modifier.padding(20.dp,0.dp,0.dp,0.dp),
+                onClick = {
+                    navController.navigate("manage_account_screen/${id}")
+                }
+            ) {
+                Icon(
+                    imageVector = Icons.Filled.Create,
+                    contentDescription = "Edit Account"
+                )
+            }
+        }
 
         Column(
-            modifier = Modifier
-                .weight(1f)
-                .padding(start = 16.dp),
-            verticalArrangement = Arrangement.spacedBy(4.dp)
-        ) {
+            verticalArrangement = Arrangement.SpaceEvenly,
+            horizontalAlignment = Alignment.CenterHorizontally
+        ){
             Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceBetween,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(5.dp),
+                Arrangement.SpaceBetween,
                 verticalAlignment = Alignment.CenterVertically
-            ) {
+            ){
+                Text(
+                    text = "Name",
+                    fontSize = 18.sp,
+                    fontWeight = FontWeight.Medium
+                )
                 Text(
                     text = name,
                     fontSize = 18.sp,
-                    fontWeight = FontWeight.Bold
+                    fontWeight = FontWeight.Medium
                 )
-                IconButton(onClick = onSaveClick) {
-                    Icon(
-                        imageVector = Icons.Filled.Star,
-                        contentDescription = "Save to favorite"
-                    )
-                }
             }
 
-            Text(text = "Username: $username")
-            Text(text = "Password: ••••••••")
-            if (description.isNotBlank()) {
-                Text(text = "Description: $description")
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(5.dp),
+                Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically
+            ){
+                Text(
+                    text = "Username",
+                    fontSize = 18.sp,
+                    fontWeight = FontWeight.Medium
+                )
+                Text(
+                    text = username,
+                    fontSize = 18.sp,
+                    fontWeight = FontWeight.Medium
+                )
+            }
+
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(5.dp),
+                Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically
+            ){
+                Text(
+                    text = "Password",
+                    fontSize = 18.sp,
+                    fontWeight = FontWeight.Medium
+                )
+                Text(
+                    text = password,
+                    fontSize = 18.sp,
+                    fontWeight = FontWeight.Medium
+                )
+            }
+
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(5.dp),
+                Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically
+            ){
+                Text(
+                    text = "Description",
+                    fontSize = 18.sp,
+                    fontWeight = FontWeight.Medium
+                )
+                Text(
+                    text = description,
+                    fontSize = 18.sp,
+                    fontWeight = FontWeight.Medium
+                )
             }
         }
     }

@@ -1,33 +1,34 @@
-package com.example.workclass.ui.screens
+package com.example.workclass.ui.Screens
 
 import android.util.Log
+import androidx.compose.runtime.Composable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.Text
 import androidx.compose.material3.rememberModalBottomSheetState
-import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavController
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
-import androidx.lifecycle.viewmodel.compose.viewModel
-import androidx.navigation.NavHostController
 import com.example.workclass.data.model.database.AppDatabase
 import com.example.workclass.data.model.database.DatabaseProvider
 import com.example.workclass.data.model.viewmodel.AccountModel
 import com.example.workclass.data.model.viewmodel.AccountViewModel
-import com.example.workclass.data.model.viewmodel.UserViewModel
 import com.example.workclass.data.model.viewmodel.toAccountEntity
-import com.example.workclass.ui.components.AccountCardComponent
+import com.example.workclass.ui.Components.AccountCardComponent
 import com.example.workclass.ui.components.AccountDetailCardComponent
 import com.example.workclass.ui.components.TopBarComponent
 import kotlinx.coroutines.CoroutineScope
@@ -36,38 +37,33 @@ import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun AccountsScreen(
-    navController: NavHostController,
-    viewModel: AccountViewModel = viewModel()
-){
-    var accounts by remember { mutableStateOf<List<AccountModel>>(emptyList()) }
-    var showBottomSheet by remember { mutableStateOf(false) }
-    val sheetState= rememberModalBottomSheetState(
-        skipPartiallyExpanded = false
-    )
-    var accountDetail by remember { mutableStateOf<AccountModel?>(null) }
+fun AccountsScreen(navController: NavController, viewModel: AccountViewModel = viewModel()){
+    var accounts by remember{ mutableStateOf<List<AccountModel>>(emptyList()) }
+    var showButtonSheet by remember { mutableStateOf(false) }
+    val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = false)
+    var accountDetail by remember { mutableStateOf <AccountModel?> (null) }
+    val db: AppDatabase = DatabaseProvider.getDatabase(LocalContext.current)
+    val accountDao = db.accountDao()
 
-    val db: AppDatabase= DatabaseProvider.getDatabase(LocalContext.current)
-    val accountDao= db.accountDao()
+    Column(){
+        //Text("Account Screen")
+        TopBarComponent("Accounts", navController, "accounts_screen")
 
-
-    Column {
-      TopBarComponent("Accounts", navController, "accounts_screen")
-
-       LaunchedEffect(Unit) {
-           viewModel.getAccounts{ response ->
-           if(response.isSuccessful){
-               accounts = response.body()?: emptyList()
-           }else{
-               Log.d("debug", "Failed to load data")
-           }
-           }
-       }
-        val listState= rememberLazyListState()
-        LazyColumn (
-               modifier = Modifier
+        //AccountCardComponent(1, "Name", "user@gmail.com", "")
+        LaunchedEffect(Unit) {
+            viewModel.getAccounts { response ->
+                if(response.isSuccessful){
+                    accounts = response.body() ?: emptyList()
+                } else {
+                    Log.d("debug", "Failed to load data: ${response.code()}")
+                }
+            }
+        }
+        val listState = rememberLazyListState()
+        LazyColumn(
+            modifier = Modifier
                 .fillMaxSize(),
-                state= listState
+            state = listState
         ){
             items(accounts){ account ->
                 AccountCardComponent(
@@ -81,21 +77,19 @@ fun AccountsScreen(
                                 accountDetail = response.body()
                             }
                         }
-
-                        showBottomSheet= true
+                        showButtonSheet = true
                     }
                 )
-
             }
         }
-        //AccountCardComponent(1, "Name", "user@gmail.com", "")
     }
-    if (showBottomSheet){
+
+    if(showButtonSheet){
         ModalBottomSheet(
             modifier = Modifier
                 .fillMaxHeight(),
             onDismissRequest = {
-                showBottomSheet= false
+                showButtonSheet = false
             },
             sheetState = sheetState
         ) {
@@ -106,17 +100,18 @@ fun AccountsScreen(
                 accountDetail?.password ?: "",
                 accountDetail?.imageURL ?: "",
                 accountDetail?.description ?: "",
-
                 onSaveClick = {
                     CoroutineScope(Dispatchers.IO).launch {
                         try{
-                            accountDetail?.let { accountDao.insert(it.toAccountEntity()) }
+                            accountDetail?.let { accountDao.insert(it.toAccountEntity())}
                             Log.d("debug-db", "Account inserted successfully")
-                        }catch (exception:Exception){
+                        } catch(exception: Exception){
                             Log.d("debug-db", "ERROR: $exception")
                         }
                     }
-                }
+                    showButtonSheet = false
+                },
+                navController
             )
         }
     }

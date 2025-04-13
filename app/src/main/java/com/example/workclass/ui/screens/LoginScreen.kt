@@ -36,7 +36,7 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import coil.compose.AsyncImage
-import com.example.workclass.data.model.UserModel
+import com.example.workclass.data.model.viewmodel.UserModel
 import com.example.workclass.data.model.viewmodel.UserViewModel
 
 @Composable
@@ -121,7 +121,7 @@ fun LoginForm (
             FilledTonalButton(
                colors= ButtonDefaults.buttonColors(
                   containerColor = MaterialTheme.colorScheme.primary,
-                   contentColor = MaterialTheme.colorScheme.secondary
+                   contentColor = Color.White
                ),
                 modifier = Modifier
                     .fillMaxWidth()
@@ -134,13 +134,15 @@ fun LoginForm (
             OutlinedButton(
                 colors= ButtonDefaults.buttonColors(
                     containerColor = MaterialTheme.colorScheme.primary,
-                    contentColor = MaterialTheme.colorScheme.secondary
+                    contentColor = Color.White
                 ),
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(0.dp, 10.dp),
                 shape = CutCornerShape(4.dp),
-                onClick = {}
+                onClick = {
+                    navController.navigate("manage_account_screen")
+                }
             ) {
                 Text("CREATE ACCOUNT")
             }
@@ -164,13 +166,19 @@ fun TryLogin(user: String,
 
     }else{
         val user_model = UserModel(0,"",user,password)
-        viewModel.loginAPI(user_model){ jsonResponse -> 
+        viewModel.loginAPI(user_model){ jsonResponse ->
             val loginStatus= jsonResponse?.get("login")?.asString
             Log.d("debug","LOGIN STATUS: $loginStatus")
             if (loginStatus == "success") {
                navController.navigate("accounts_screen")
+            }else {
+                Toast.makeText(
+                    context,
+                    "Failed login, check your credentials",
+                    Toast.LENGTH_SHORT
+                ).show()
             }
-            
+
         }
     }
 }

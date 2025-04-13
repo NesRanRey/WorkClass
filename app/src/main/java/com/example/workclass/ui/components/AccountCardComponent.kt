@@ -1,5 +1,8 @@
-package com.example.workclass.ui.components
+package com.example.workclass.ui.Components
 
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.MoreVert
+import androidx.compose.material3.Icon
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -7,11 +10,8 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
-import androidx.compose.material.Icon
-import androidx.compose.material.IconButton
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material3.Card
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -30,59 +30,58 @@ fun AccountCardComponent(
     name: String,
     username: String,
     imageURL: String,
-    onButtonClick: ()->Unit
+    onButtonClick: () -> Unit
 ){
-    Card(
+    Card (
         modifier = Modifier
             .fillMaxWidth()
             .padding(3.dp)
-    ) {
+    ){
         Row {
             AsyncImage(
                 modifier = Modifier
                     .width(80.dp)
                     .height(80.dp)
                     .padding(10.dp),
-                model= imageURL,
-                error= painterResource(R.drawable.p),
+                model = imageURL,
+                error = painterResource(R.drawable.p),
                 contentDescription = "Account Logo",
                 contentScale = ContentScale.FillBounds
             )
             Column {
                 Text(
-                    text= name,
+                    text = name,
                     fontSize = 18.sp,
                     fontWeight = FontWeight.Bold,
-                    modifier= Modifier.padding(2.dp, 8.dp, 0.dp, 0.dp)
+                    modifier = Modifier.padding(2.dp,8.dp,0.dp,0.dp)
                 )
                 Text(
-                    text= username,
+                    text = username,
                     fontSize = 18.sp,
                     fontWeight = FontWeight.Bold,
-                    modifier= Modifier.padding(2.dp, 8.dp, 0.dp, 0.dp)
-
+                    modifier = Modifier.padding(2.dp,8.dp,0.dp,0.dp)
                 )
-
             }
-
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(80.dp),
-                horizontalArrangement = Arrangement.End,
-                verticalAlignment = Alignment.CenterVertically
-            ){
-                IconButton(
-                    modifier= Modifier
-                        .padding(2.dp, 8.dp, 0.dp, 0.dp),
-                    onClick = { onButtonClick() }
-                ) {
-                Icon(
-                    Icons.Filled.MoreVert,
-                    contentDescription= "Icon"
-                )
+            Row {
+                Row (
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(80.dp),
+                    horizontalArrangement = Arrangement.End,
+                    verticalAlignment = Alignment.CenterVertically
+                ){
+                    IconButton(
+                        modifier = Modifier
+                            .padding(0.dp,0.dp,10.dp,0.dp),
+                        onClick = { onButtonClick() }
+                    ) {
+                        Icon(
+                            Icons.Filled.MoreVert,
+                            contentDescription = "Icon"
+                        )
+                    }
                 }
-            }
             }
         }
     }
+}

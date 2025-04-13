@@ -21,7 +21,7 @@ data class AccountEntity (
     @ColumnInfo(name = "password") val password: String,
     @ColumnInfo(name = "description") val description: String,
     @ColumnInfo(name = "imageURL") val imageURL: String,
-    )
+)
 
 fun AccountModel.toAccountEntity ( ): AccountEntity{
     return AccountEntity(

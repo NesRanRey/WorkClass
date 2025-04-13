@@ -1,4 +1,4 @@
-package com.example.workclass.data.model
+package com.example.workclass.data.model.viewmodel
 
 import androidx.compose.ui.graphics.vector.ImageVector
 

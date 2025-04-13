@@ -7,15 +7,14 @@ import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import com.example.workclass.data.model.viewmodel.AccountEntity
 
-
 @Dao
 interface AccountDao {
-    @Query("SELECT * FROM AccountEntity")
-     fun getAll(): List<AccountEntity>
+ @Query("SELECT * FROM AccountEntity")
+ fun getAll(): List<AccountEntity>
 
-     @Insert (onConflict = OnConflictStrategy.REPLACE)
-     fun insert (account:AccountEntity)
+ @Insert(onConflict = OnConflictStrategy.REPLACE)
+ fun insert(account: AccountEntity)
 
-     @Delete
-     fun delete (account:AccountEntity)
+ @Delete
+ fun delete(account: AccountEntity)
 }

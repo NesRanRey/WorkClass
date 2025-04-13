@@ -15,6 +15,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.navigation.NavController
+import com.example.workclass.data.model.database.AppDatabase
 import com.example.workclass.data.model.database.DatabaseProvider
 import com.example.workclass.data.model.viewmodel.AccountEntity
 import com.example.workclass.ui.components.FavoriteAccountCard
@@ -25,42 +26,41 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
 @Composable
-fun FavoriteAccountsScreen(navController: NavController) {
-    val db = DatabaseProvider.getDatabase(LocalContext.current)
+fun FavoriteAccountsScreen(navController: NavController){
+    val db: AppDatabase = DatabaseProvider.getDatabase(LocalContext.current)
     val accountDao = db.accountDao()
     var accountsdb by remember { mutableStateOf<List<AccountEntity>>(emptyList()) }
-
     LaunchedEffect(Unit) {
-        accountsdb = withContext(Dispatchers.IO) {
+        accountsdb = withContext(Dispatchers.IO){
             accountDao.getAll()
         }
     }
 
-    Column {
-        TopBarComponent("Favorite Accounts", navController, "favorite_accounts_screen")
-
+    Column(){
         val listState = rememberLazyListState()
+        TopBarComponent("Favorite Accounts", navController,"favorite_accounts_screen")
         LazyColumn(
-            modifier = Modifier.fillMaxSize(),
+            modifier = Modifier
+                .fillMaxSize(),
             state = listState
-        ) {
-            items(accountsdb) { accountdb ->
+        ){
+            items(accountsdb){ accountdb ->
                 FavoriteAccountCard(
-                    id = accountdb.id ?: 0,
-                    name = accountdb.name ?: "",
-                    username = accountdb.username ?: "",
-                    password = accountdb.password ?: "",
-                    description = accountdb.description ?: "",
-                    imageURL = accountdb.imageURL ?: "",
+                    accountdb.id ?: 0,
+                    accountdb.name ?: "",
+                    accountdb.username ?: "",
+                    accountdb.password ?: "",
+                    accountdb.description ?: "",
+                    accountdb.imageURL ?: "",
                     onDeleteClick = {
                         CoroutineScope(Dispatchers.IO).launch {
-                            try {
+                            try{
                                 accountDao.delete(accountdb)
-                                accountsdb = withContext(Dispatchers.IO) {
+                                accountsdb = withContext(Dispatchers.IO){
                                     accountDao.getAll()
                                 }
-
-                            } catch (exception: Exception) {
+                                Log.d("debug-db", "Account deleted successfully")
+                            } catch(exception: Exception){
                                 Log.d("debug-db", "Error: $exception")
                             }
                         }

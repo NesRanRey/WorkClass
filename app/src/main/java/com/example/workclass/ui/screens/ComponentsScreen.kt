@@ -153,8 +153,8 @@ import androidx.navigation.NavHostController
 import androidx.window.core.layout.WindowHeightSizeClass
 import androidx.window.core.layout.WindowWidthSizeClass
 import com.example.workclass.R
-import com.example.workclass.data.model.MenuModel
-import com.example.workclass.data.model.PostCardModel
+import com.example.workclass.data.model.viewmodel.MenuModel
+import com.example.workclass.data.model.viewmodel.PostCardModel
 import com.example.workclass.ui.components.PostCardCompactComponent
 import com.example.workclass.ui.components.PostCardComponent
 import com.example.workclass.ui.components.PostCardComponent

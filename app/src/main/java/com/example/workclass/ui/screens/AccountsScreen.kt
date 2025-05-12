@@ -1,4 +1,4 @@
-package com.example.workclass.ui.Screens
+package com.example.WorkClass.ui.Screens
 
 import android.util.Log
 import androidx.compose.runtime.Composable
@@ -113,6 +113,6 @@ fun AccountsScreen(navController: NavController, viewModel: AccountViewModel = v
                 },
                 navController
             )
-        }
+            }
     }
 }

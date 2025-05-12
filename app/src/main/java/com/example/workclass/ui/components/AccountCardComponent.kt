@@ -85,3 +85,7 @@ fun AccountCardComponent(
         }
     }
 }
+
+class AccountCardComponent {
+
+}

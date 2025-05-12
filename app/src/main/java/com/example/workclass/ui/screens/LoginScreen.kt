@@ -79,9 +79,9 @@ fun LoginForm (
             }
 
             AsyncImage(
-                modifier = Modifier.size(200.dp),
-                model= "https://upload.wikimedia.org/wikipedia/en/thumb/4/47/FC_Barcelona_%28crest%29.svg/1200px-FC_Barcelona_%28crest%29.svg.png",
-                contentDescription = "Barcelona_Logo",
+                modifier = Modifier.size(350.dp),
+                model= "https://logosmarcas.net/wp-content/uploads/2020/09/Spotify-Logo.png",
+                contentDescription = "Spotify_Logo",
                 contentScale = ContentScale.Fit
             )
 

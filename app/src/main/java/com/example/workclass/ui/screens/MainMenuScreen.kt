@@ -49,8 +49,14 @@ fun MainMenuScreen(navController: NavHostController){
         Button(
             onClick = {navController.navigate("camara_screen")}
         ) {
-            Text("Go to Camara Screen")
+            Text("Go to Camara")
         }
+        Button(
+            onClick = {navController.navigate("calendario_screen")}
+        ) {
+            Text("Go to Calendario")
+        }
+
 
 }
 }

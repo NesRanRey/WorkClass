@@ -15,6 +15,7 @@ import com.example.WorkClass.ui.Screens.AccountsScreen
 import com.example.tuapp.ui.screens.BbvaInterface
 import com.example.workclass.data.model.database.AppDatabase
 import com.example.workclass.data.model.database.DatabaseProvider
+import com.example.workclass.ui.screens.AppScreen
 import com.example.workclass.ui.screens.ComponentsScreen
 import com.example.workclass.ui.screens.FavoriteAccountsScreen
 import com.example.workclass.ui.screens.HomeScreen
@@ -80,5 +81,6 @@ fun SetupNavGraph(navController: NavHostController) {
     }
         composable("favorite_accounts_screen") { FavoriteAccountsScreen(navController) }
         composable("camara_screen") { Camara(navController) }
+        composable("calendario_screen") { AppScreen(navController) }
     }
 }

@@ -34,7 +34,7 @@ import kotlin.collections.ArrayList
 @SuppressLint("QueryPermissionsNeeded")
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun AppScreen(navController: NavController) {
+fun AppScreen (navController: NavController) {
     val context = LocalContext.current
 
     // Permisos

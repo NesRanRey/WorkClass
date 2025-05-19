@@ -11,10 +11,11 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
-import com.example.tuapp.ui.screens.BbvaInterface
 import com.example.workclass.data.model.database.AppDatabase
 import com.example.workclass.data.model.database.DatabaseProvider
-import com.example.workclass.ui.Screens.AccountsScreen
+import com.example.workclass.ui.screens.AccountsScreen
+import com.example.workclass.ui.screens.AppScreen
+import com.example.workclass.ui.screens.BbvaInterface
 import com.example.workclass.ui.screens.ComponentsScreen
 import com.example.workclass.ui.screens.FavoriteAccountsScreen
 import com.example.workclass.ui.screens.HomeScreen
@@ -23,6 +24,8 @@ import com.example.workclass.ui.theme.WorkClassTheme
 import com.example.workclass.ui.screens.MainMenuScreen
 import com.example.workclass.ui.screens.ManageAccountScreen
 import com.example.workclass.ui.screens.TestScreen
+import com.example.workclass.ui.screens.Camara
+import com.example.workclass.ui.screens.NotificationScreen
 
 
 class MainActivity : ComponentActivity() {
@@ -34,7 +37,7 @@ class MainActivity : ComponentActivity() {
         try {
             database = DatabaseProvider.getDatabase(this)
             Log.d("debug-db", "Database loaded Successfully")
-        } catch (exception: Exception) {
+        } catch (exception: Exception) {+
             Log.d("debug-db", "ERROR: $exception")
         }
 
@@ -56,7 +59,7 @@ fun ComposableMultiScreenApp() {
 
 @Composable
 fun SetupNavGraph(navController: NavHostController) {
-    NavHost(navController = navController, startDestination = "login_screen") {
+    NavHost(navController = navController, startDestination = "main_menu") {
         composable("main_menu") { MainMenuScreen(navController) }
         composable("home_screen") { HomeScreen(navController) }
         composable("test_screen") { TestScreen(navController) }
@@ -76,5 +79,9 @@ fun SetupNavGraph(navController: NavHostController) {
             )
     }
         composable("favorite_accounts_screen") { FavoriteAccountsScreen(navController) }
+        composable("camara_screen") { Camara(navController) }
+        composable("calendario_screen") { AppScreen(navController) }
+        composable("notification_screen") { NotificationScreen(navController) }
+
     }
 }

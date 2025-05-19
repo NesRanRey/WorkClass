@@ -1,4 +1,4 @@
-package com.example.workclass.ui.Components
+package com.example.workclass.ui.components
 
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.MoreVert
@@ -84,4 +84,8 @@ fun AccountCardComponent(
             }
         }
     }
+}
+
+class AccountCardComponent {
+
 }

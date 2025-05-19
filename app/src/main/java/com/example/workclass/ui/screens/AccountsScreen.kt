@@ -1,4 +1,4 @@
-package com.example.workclass.ui.Screens
+package com.example.workclass.ui.screens
 
 import android.util.Log
 import androidx.compose.runtime.Composable
@@ -28,7 +28,7 @@ import com.example.workclass.data.model.database.DatabaseProvider
 import com.example.workclass.data.model.viewmodel.AccountModel
 import com.example.workclass.data.model.viewmodel.AccountViewModel
 import com.example.workclass.data.model.viewmodel.toAccountEntity
-import com.example.workclass.ui.Components.AccountCardComponent
+import com.example.workclass.ui.components.AccountCardComponent
 import com.example.workclass.ui.components.AccountDetailCardComponent
 import com.example.workclass.ui.components.TopBarComponent
 import kotlinx.coroutines.CoroutineScope
@@ -37,7 +37,7 @@ import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun AccountsScreen(navController: NavController, viewModel: AccountViewModel = viewModel()){
+fun AccountsScreen (navController: NavController, viewModel: AccountViewModel = viewModel()){
     var accounts by remember{ mutableStateOf<List<AccountModel>>(emptyList()) }
     var showButtonSheet by remember { mutableStateOf(false) }
     val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = false)
@@ -113,6 +113,7 @@ fun AccountsScreen(navController: NavController, viewModel: AccountViewModel = v
                 },
                 navController
             )
-        }
+            }
+
     }
 }
